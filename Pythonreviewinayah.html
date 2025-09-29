@@ -41,6 +41,11 @@
             width: 100%;
         }
 
+        /* Hide mobile menu button on desktop */
+        .mobile-menu-btn {
+            display: none;
+        }
+
         /* Sidebar Styles */
         .sidebar {
             background: rgba(21, 25, 33, 0.95);
@@ -1005,21 +1010,76 @@
                 padding: 1rem;
             }
 
-            /* Hamburger menu for mobile */
+            /* Show mobile menu button on mobile */
             .mobile-menu-btn {
+                display: block !important;
                 position: fixed;
-                top: 1rem;
+                top: 1.5rem;
                 left: 1rem;
-                z-index: 1001;
-                background: var(--accent-primary);
+                z-index: 1002;
+                background: rgba(0, 212, 170, 0.9);
                 color: white;
                 border: none;
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                border-radius: 0.5rem;
                 font-size: 1.2rem;
                 cursor: pointer;
-                box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+
+            .mobile-menu-btn:hover {
+                background: rgba(0, 212, 170, 1);
+                transform: scale(1.05);
+                box-shadow: 0 4px 15px rgba(0, 212, 170, 0.4);
+            }
+
+            .mobile-menu-btn:active {
+                transform: scale(0.95);
+            }
+
+            /* Enhanced sidebar for mobile */
+            .sidebar {
+                background: rgba(21, 25, 33, 0.98);
+                backdrop-filter: blur(15px);
+                border-right: 1px solid var(--accent-primary);
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+            }
+
+            /* Ensure navigation text is visible */
+            .nav-link {
+                color: var(--text-primary) !important;
+                font-size: 1rem !important;
+                padding: 1rem !important;
+                margin: 0.5rem 0 !important;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease;
+            }
+
+            .nav-link:hover, .nav-link.active {
+                background: rgba(0, 212, 170, 0.2) !important;
+                color: var(--accent-primary) !important;
+                transform: translateX(5px);
+            }
+
+            /* Profile section mobile styling */
+            .profile-section {
+                padding: 1.5rem 1rem !important;
+                border-bottom: 1px solid var(--border);
+                text-align: center;
+            }
+
+            .profile-name {
+                color: var(--text-primary) !important;
+                font-size: 1.1rem !important;
+                font-weight: 600 !important;
+            }
+
+            .profile-role {
+                color: var(--text-secondary) !important;
+                font-size: 0.9rem !important;
             }
 
             /* Overlay for mobile menu */
@@ -1034,6 +1094,11 @@
                 opacity: 0;
                 pointer-events: none;
                 transition: opacity 0.3s ease;
+            }
+
+            .sidebar-overlay.active {
+                opacity: 1;
+                pointer-events: all;
             }
 
             .sidebar-overlay.active {
@@ -1281,6 +1346,19 @@
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
         }
 
+        .logo-attribution {
+            color: #7c3aed;
+            font-size: 0.85rem;
+            margin: 0.5rem 0 0 0;
+            font-weight: 600;
+            opacity: 0.8;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #7c3aed, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         /* Mobile logo adjustments */
         @media (max-width: 768px) {
             .logo-header {
@@ -1303,6 +1381,10 @@
             
             .logo-subtitle {
                 font-size: 0.9rem;
+            }
+            
+            .logo-attribution {
+                font-size: 0.75rem;
             }
         }
 
@@ -1334,6 +1416,10 @@
             .logo-subtitle {
                 font-size: 0.85rem;
             }
+            
+            .logo-attribution {
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -1345,13 +1431,14 @@
             <div class="logo-text">
                 <h1 class="logo-title">✨ Inayah's Python Journey ✨</h1>
                 <p class="logo-subtitle">🚀 Learning • 💻 Creating • 🌟 Exploring Code</p>
+                <p class="logo-attribution">👨‍🏫 Created by Teacher Theo</p>
             </div>
         </div>
     </header>
 
     <!-- Mobile Menu Button -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display: none;">
-        Menu
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i>
     </button>
 
     <!-- Mobile Sidebar Overlay -->
