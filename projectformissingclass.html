@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Catch-Up Mini Projects — Guided Python Practice</title>
+    <style>
+        :root {
+            --surface: #ffffff;
+            --surface-muted: #f5f5ff;
+            --primary: #4338ca;
+            --primary-soft: #6366f1;
+            --accent: #f97316;
+            --text-strong: #0f172a;
+            --text-body: #1f2937;
+            --text-muted: #475569;
+            --border: rgba(99, 102, 241, 0.18);
+            --radius-lg: 28px;
+            --radius: 18px;
+            --radius-sm: 12px;
+            --shadow: 0 18px 36px -20px rgba(15, 23, 42, 0.6);
+            font-size: 16px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text-body);
+            background: linear-gradient(160deg, #eef2ff 0%, #e0f2fe 40%, #ede9fe 100%);
+            min-height: 100vh;
+            padding: clamp(20px, 4vw, 48px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: min(1100px, 100%);
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid rgba(99, 102, 241, 0.12);
+        }
+
+        header {
+            padding: clamp(28px, 6vw, 52px) clamp(24px, 7vw, 72px);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.18));
+        }
+
+        header .tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 18px;
+            border-radius: 999px;
+            color: var(--primary-soft);
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+
+        header h1 {
+            margin: 0 0 16px;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--text-strong);
+            line-height: 1.1;
+        }
+
+        header p {
+            margin: 0;
+            max-width: 640px;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .content {
+            padding: clamp(28px, 5vw, 56px) clamp(22px, 6vw, 64px) clamp(40px, 6vw, 60px);
+            background: var(--surface);
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 0 clamp(22px, 6vw, 64px) clamp(18px, 4vw, 26px);
+            padding: 0;
+            list-style: none;
+        }
+
+        .quick-links a {
+            text-decoration: none;
+            background: rgba(99, 102, 241, 0.16);
+            color: var(--primary);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .quick-links a:hover,
+        .quick-links a:focus {
+            background: rgba(79, 70, 229, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .quick-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            gap: clamp(24px, 3vw, 32px);
+        }
+
+        .card {
+            background: var(--surface-muted);
+            border-radius: var(--radius);
+            padding: clamp(24px, 4vw, 40px);
+            border: 1px solid var(--border);
+            scroll-margin-top: 110px;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+            color: var(--text-strong);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-meta {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0 26px;
+        }
+
+        .pill {
+            background: rgba(99, 102, 241, 0.16);
+            color: var(--primary);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            font-size: 0.88rem;
+        }
+
+        h3 {
+            margin: 30px 0 12px;
+            font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+            color: var(--primary);
+            letter-spacing: 0.01em;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        .steps {
+            counter-reset: step-counter;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 14px;
+        }
+
+        .steps li {
+            position: relative;
+            padding: 18px 18px 18px 64px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-sm);
+            line-height: 1.55;
+            color: var(--text-muted);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            counter-increment: step-counter;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .step-guide {
+            display: grid;
+            gap: 18px;
+            margin-top: 18px;
+        }
+
+        .guide-step {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            padding: 20px clamp(18px, 4vw, 28px);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            display: grid;
+            gap: 14px;
+        }
+
+        .guide-step h4 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--text-strong);
+        }
+
+        .guide-step p {
+            margin: 0;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        .apply-box {
+            background: rgba(99, 102, 241, 0.08);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .apply-box strong {
+            color: var(--primary);
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 16px clamp(16px, 4vw, 26px);
+            border-radius: 14px;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        code {
+            font-family: "Fira Code", "Source Code Pro", "SFMono-Regular", Menlo, Consolas, monospace;
+        }
+
+        .rubric {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            margin-top: 20px;
+        }
+
+        .badge {
+            background: rgba(99, 102, 241, 0.12);
+            border-radius: 14px;
+            padding: 14px 18px;
+            color: var(--text-strong);
+            font-weight: 600;
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            display: grid;
+            gap: 4px;
+        }
+
+        .badge span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .notes {
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: var(--radius);
+            padding: clamp(18px, 3vw, 26px);
+            color: var(--text-muted);
+            line-height: 1.65;
+            border: 1px solid rgba(203, 213, 225, 0.6);
+        }
+
+        footer {
+            padding: clamp(22px, 4vw, 34px) clamp(26px, 6vw, 60px);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.2));
+            color: var(--text-muted);
+            font-size: 0.96rem;
+            line-height: 1.6;
+        }
+
+        footer strong {
+            color: var(--primary);
+        }
+
+        @media (max-width: 780px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                border-radius: 20px;
+            }
+
+            header {
+                text-align: center;
+                padding: 26px 22px 36px;
+            }
+
+            header .tagline {
+                margin-bottom: 14px;
+                justify-content: center;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .steps li {
+                padding-left: 58px;
+            }
+
+            .steps li::before {
+                left: 18px;
+            }
+
+            .guide-step {
+                padding: 18px;
+            }
+
+            pre {
+                font-size: 0.9rem;
+            }
+
+            .quick-links {
+                margin: 0 20px 22px;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .quick-links::-webkit-scrollbar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .tagline {
+                font-size: 0.85rem;
+            }
+
+            .pill {
+                font-size: 0.82rem;
+                padding: 6px 12px;
+            }
+
+            .pill-list {
+                gap: 8px;
+            }
+
+            .pill-list .pill {
+                flex: 1 1 auto;
+                text-align: center;
+            }
+
+            .steps li {
+                padding: 16px 16px 16px 54px;
+            }
+
+            .steps li::before {
+                width: 30px;
+                height: 30px;
+                font-size: 0.85rem;
+            }
+
+            pre {
+                padding: 14px;
+                font-size: 0.85rem;
+            }
+
+            .quick-links {
+                gap: 8px;
+            }
+
+            .quick-links a {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <header>
+                <div class="tagline">Catch-Up Mini Projects · Weeks 2, 3 & 4</div>
+            <h1>Guided Python Practice for Students Who Missed Class</h1>
+            <p>Each student tackles <strong>one</strong> compact console project aligned with the week they missed. All projects rely entirely on user input (no file loading), reinforce core Python skills, and can be finished in about an hour.</p>
+        </header>
+
+        <nav class="quick-links" aria-label="Quick section links">
+            <a href="#" onclick="showProject('tyler')">Tyler's Project</a>
+            <a href="#" onclick="showProject('jade')">Jade's Project</a>
+            <a href="#" onclick="showProject('litong')">Litong's Project</a>
+            <a href="#" onclick="showProject('all')">Show All</a>
+            <a href="#teacher-notes">Teacher Tips</a>
+        </nav>
+
+        <div class="content">
+            <div class="grid">
+
+                <section class="card" id="project-a">
+                    <h2>Project A · Gratitude & Wins Journal <span style="color: var(--accent); font-size: 0.8em;">(Tyler's Assignment)</span></h2>
+                    <p class="project-meta">For students who <strong>attended Week 2</strong> (lists & strings) but missed Week 3 (dictionaries & search). Build a menu-driven journal that records daily gratitude with simple in-memory storage.</p>
+
+                    <div class="pill-list">
+                        <span class="pill">Console App</span>
+                        <span class="pill">Lists & Dictionaries</span>
+                        <span class="pill">User Input Validation</span>
+                        <span class="pill">Keyword Search</span>
+                    </div>
+
+                    <h3>Learning objectives</h3>
+                    <ul>
+                        <li>Store structured data in Python dictionaries and keep them inside a list during runtime.</li>
+                        <li>Design a friendly text menu and respond to user choices.</li>
+                        <li>Filter entries with simple keyword matching.</li>
+                        <li>Practice clean, readable output formatting in the terminal.</li>
+                    </ul>
+
+                    <h3>Checklist before coding</h3>
+                    <ol class="steps">
+                        <li>Start a file named <code>gratitude.py</code> and import <code>datetime</code> so you can validate dates.</li>
+                        <li>Create an empty list called <code>entries</code> to hold each journal log as a dictionary.</li>
+                        <li>Plan a menu loop with options to add, view, search, and exit.</li>
+                        <li>Decide how you will format output so the journaling experience feels encouraging.</li>
+                        <li>Test each menu option as you build it—stay inside the loop until the user chooses Exit.</li>
+                    </ol>
+
+                    <h3>Implementation walkthrough</h3>
+                    <div class="step-guide">
+                        <div class="guide-step">
+                            <h4>Step 1 &mdash; Set up data storage</h4>
+                            <p>Create one list that lives for the entire program and keeps dictionaries for each entry. Import <code>datetime</code> now so it is ready for validation later.</p>
+                            <pre><code>from datetime import datetime
+
+entries = []  # each entry will be {"date": str, "note": str}
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Swap the keys if your project tracks something else (for example <code>{"title": ..., "reflection": ...}</code>).</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 2 &mdash; Collect a new entry</h4>
+                            <p>Wrap the input prompts inside a function so the main menu can call it whenever the user selects option 1. Validate the date and make sure the note is not empty before saving the dictionary.</p>
+                            <pre><code>def add_entry():
+    raw_date = input("Date (YYYY-MM-DD): ").strip()
+    try:
+        datetime.strptime(raw_date, "%Y-%m-%d")
+    except ValueError:
+        print("❌ Please use the format YYYY-MM-DD.\n")
+        return
+
+    note = input("What are you thankful for today?: ").strip()
+    if not note:
+        print("❌ Please add a few words.\n")
+        return
+
+    entries.append({"date": raw_date, "note": note})
+    print("✅ Entry saved!\n")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Change the prompts and dictionary keys if you are tracking wins, goals, or class takeaways instead of gratitude.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 3 &mdash; Show the existing log</h4>
+                            <p>Formatting the list nicely motivates the user to keep going. Handle the empty-state early so the rest of the function can assume there is data.</p>
+                            <pre><code>def view_entries():
+    if not entries:
+        print("(No entries yet — add your first one!)\n")
+        return
+
+    print("\n=== Gratitude Log ===")
+    for index, entry in enumerate(entries, start=1):
+        print(f"{index}. {entry['date']} — {entry['note']}")
+    print()
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Reorder the output or add emojis to match the vibe of your project—just keep the loop structure.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 4 &mdash; Search by keyword</h4>
+                            <p>Lowercase both sides of the comparison so the search is case-insensitive. A list comprehension keeps the code short and readable.</p>
+                            <pre><code>def search_entries():
+    keyword = input("Keyword to search for: ").strip().lower()
+    if not keyword:
+        print("❌ Try typing a word to search for.\n")
+        return
+
+    matches = [entry for entry in entries if keyword in entry["note"].lower()]
+    if matches:
+        print("\nMatches:")
+        for entry in matches:
+            print(f"- {entry['date']} — {entry['note']}")
+        print()
+    else:
+        print("No matching notes yet.\n")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Swap the condition if you want to match on mood, tags, or any other field you store in the dictionary.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 5 &mdash; Build the main loop</h4>
+                            <p>Keep the menu in a <code>while True</code> loop. Each branch calls the helper functions you already wrote, and Exit shares a summary before breaking out.</p>
+                            <pre><code>def main():
+    while True:
+        print("\nMenu: (1) Add (2) View (3) Search (4) Exit")
+        choice = input("Choose: ").strip()
+        if choice == "1":
+            add_entry()
+        elif choice == "2":
+            view_entries()
+        elif choice == "3":
+            search_entries()
+        elif choice == "4":
+            print(f"You logged {len(entries)} gratitude moment(s). See you tomorrow! ✨")
+            break
+        else:
+            print("Pick 1, 2, 3, or 4.")
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Rephrase the menu text to match your project, but keep the loop pattern so each option stays accessible.</div>
+                        </div>
+                    </div>
+
+                    <h3>Rubric (5 points)</h3>
+                    <div class="rubric">
+                        <div class="badge">Add entry<div><span>Validates date & note, stores dictionary</span></div></div>
+                        <div class="badge">View entries<div><span>Numbered, readable, handles empty state</span></div></div>
+                        <div class="badge">Search<div><span>Case-insensitive keyword matching</span></div></div>
+                        <div class="badge">Menu & flow<div><span>Clear loop, polite messages</span></div></div>
+                        <div class="badge">Code clarity<div><span>Good naming, helpful comments</span></div></div>
+                    </div>
+
+                    <h3>Alternative project ideas</h3>
+                    <div class="notes">
+                        <p><strong>If gratitude journaling doesn't appeal, try one of these variations:</strong></p>
+                        <ul>
+                            <li><strong>Daily Wins Tracker</strong> — Record small accomplishments with categories (school, personal, social). Search by category or keyword.</li>
+                            <li><strong>Book Recommendations Log</strong> — Store book titles, authors, and who recommended them. Search by recommender or genre tags.</li>
+                            <li><strong>Class Notes Organizer</strong> — Keep quick notes by subject and date. Add search by subject or keywords in notes.</li>
+                            <li><strong>Workout Progress Journal</strong> — Log exercises, duration, and how you felt. Track patterns with keyword searches.</li>
+                        </ul>
+                    </div>
+
+                    <h3>Level-up ideas</h3>
+                    <div class="notes">
+                        <ul>
+                            <li>Add a mood rating (1–10) and average the score when exiting.</li>
+                            <li>Let the user edit or delete an existing entry during the session.</li>
+                            <li>Exporting to a file can be an optional stretch once the basics are solid.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="card" id="project-b">
+                    <h2>Project B · Smart Shopping Helper <span style="color: var(--accent); font-size: 0.8em;">(Jade's Assignment)</span></h2>
+                    <p class="project-meta">For students who <strong>attended Week 3</strong> (dictionaries & search) but missed Week 2 (loops & lists). Create a tidy shopping helper that stores items in memory, tracks quantities, and stays responsive to user input.</p>
+
+                    <div class="pill-list">
+                        <span class="pill">Console UI</span>
+                        <span class="pill">Lists of Dictionaries</span>
+                        <span class="pill">Input Validation</span>
+                        <span class="pill">Sorting & Filtering</span>
+                    </div>
+
+                    <h3>Learning objectives</h3>
+                    <ul>
+                        <li>Capture structured item data (name + quantity) without relying on files.</li>
+                        <li>Reinforce <code>while</code> loops, branching, and list operations.</li>
+                        <li>Provide a helpful user experience with confirmations and error checks.</li>
+                        <li>Optionally group or sort items to explore bonus list features.</li>
+                    </ul>
+
+                    <h3>Checklist before coding</h3>
+                    <ol class="steps">
+                        <li>Make a new file named <code>shopping_helper.py</code> and plan what data each item needs (name, quantity, optional tags).</li>
+                        <li>Decide how the menu should behave so the user can add, view, update, remove, and exit smoothly.</li>
+                        <li>Sketch validation rules that stop bad inputs (blank names, negative numbers).</li>
+                        <li>Think about how you want to order the items when displaying them.</li>
+                        <li>Write helper functions for repeated logic (finding items, printing the cart) to keep the main loop tidy.</li>
+                    </ol>
+
+                    <h3>Implementation walkthrough</h3>
+                    <div class="step-guide">
+                        <div class="guide-step">
+                            <h4>Step 1 &mdash; Create your data structures</h4>
+                            <p>Keep everything in memory with a simple list. A helper function makes it easy to find an item by name.</p>
+                            <pre><code>cart = []  # stores dictionaries like {"name": "milk", "quantity": 2}
+
+
+def find_item(name):
+    for item in cart:
+        if item["name"] == name:
+            return item
+    return None
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Add extra keys (like <code>"category"</code>) if your project needs more details—just keep using dictionaries.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 2 &mdash; Add new items with validation</h4>
+                            <p>Collect the name and quantity, clean the input, and merge duplicates by reusing <code>find_item</code>.</p>
+                            <pre><code>def add_item():
+    name = input("Item name: ").strip().lower()
+    if not name:
+        print("❌ Please enter an item name.\n")
+        return
+
+    quantity_raw = input("Quantity: ").strip()
+    if not quantity_raw.isdigit() or int(quantity_raw) <= 0:
+        print("❌ Quantity should be a positive number.\n")
+        return
+
+    quantity = int(quantity_raw)
+    existing = find_item(name)
+    if existing:
+        existing["quantity"] += quantity
+        print(f"🔄 Updated {name} to {existing['quantity']}.")
+    else:
+        cart.append({"name": name, "quantity": quantity})
+        print("✅ Added to cart!\n")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Replace the prompts if you are planning supplies for class or equipment for sports—the validation pattern stays the same.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 3 &mdash; Display the cart neatly</h4>
+                            <p>Sort the items alphabetically so the output is predictable. Track total units to give the user a useful summary.</p>
+                            <pre><code>def view_cart():
+    if not cart:
+        print("(Your cart is empty.)\n")
+        return
+
+    print("\n=== Shopping Cart ===")
+    total_units = 0
+    for index, item in enumerate(sorted(cart, key=lambda x: x["name"]), start=1):
+        print(f"{index}. {item['name'].title()} — {item['quantity']} unit(s)")
+        total_units += item["quantity"]
+    print(f"Total units: {total_units}\n")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Switch the ordering or add color coding in the text if you want to highlight priority items.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 4 &mdash; Update or remove items safely</h4>
+                            <p>Re-use the sorted view so the numbering matches what the user just saw. Handle all the ways someone might type invalid input.</p>
+                            <pre><code>def update_item():
+    if not cart:
+        print("Nothing to update yet!\n")
+        return
+
+    view_cart()
+    choice = input("Number to update: ").strip()
+    if not choice.isdigit():
+        print("❌ Enter a valid number.\n")
+        return
+
+    index = int(choice) - 1
+    sorted_cart = sorted(cart, key=lambda x: x["name"])
+    if 0 <= index < len(sorted_cart):
+        new_qty = input("New quantity: ").strip()
+        if new_qty.isdigit() and int(new_qty) > 0:
+            sorted_cart[index]["quantity"] = int(new_qty)
+            print("🔄 Quantity updated!\n")
+        else:
+            print("❌ Quantity must be a positive number.\n")
+    else:
+        print("❌ That number is out of range.\n")
+
+
+def remove_item():
+    if not cart:
+        print("Nothing to remove yet!\n")
+        return
+
+    view_cart()
+    choice = input("Number to remove: ").strip()
+    if not choice.isdigit():
+        print("❌ Enter a valid number.\n")
+        return
+
+    index = int(choice) - 1
+    sorted_cart = sorted(cart, key=lambda x: x["name"])
+    if 0 <= index < len(sorted_cart):
+        removed = sorted_cart.pop(index)
+        cart.clear()
+        cart.extend(sorted_cart)
+        print(f"🗑️ Removed {removed['name'].title()} from your cart.\n")
+    else:
+        print("❌ That number is out of range.\n")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> If your project tracks budgets or deadlines, adjust the confirmation message to reinforce the behavior you want.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 5 &mdash; Control everything with the main loop</h4>
+                            <p>The loop keeps the program running until the user exits. The summary on exit reinforces what they achieved.</p>
+                            <pre><code>def main():
+    while True:
+        print("\nMenu: (1) Add (2) View (3) Update (4) Remove (5) Exit")
+        choice = input("Choose: ").strip()
+        if choice == "1":
+            add_item()
+        elif choice == "2":
+            view_cart()
+        elif choice == "3":
+            update_item()
+        elif choice == "4":
+            remove_item()
+        elif choice == "5":
+            total_units = sum(item["quantity"] for item in cart)
+            print(f"You planned {len(cart)} item(s) totaling {total_units} unit(s). Happy shopping! 🛒")
+            break
+        else:
+            print("Pick 1, 2, 3, 4, or 5.")
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> Rename menu options if you are scheduling tasks or packing for a trip—the branching logic can stay identical.</div>
+                        </div>
+                    </div>
+
+                    <h3>Rubric (5 points)</h3>
+                    <div class="rubric">
+                        <div class="badge">Add items<div><span>Merges duplicates, validates quantity</span></div></div>
+                        <div class="badge">View cart<div><span>Alphabetical, readable summary</span></div></div>
+                        <div class="badge">Update/remove<div><span>Handles invalid numbers gracefully</span></div></div>
+                        <div class="badge">Menu & UX<div><span>Clear prompts and confirmations</span></div></div>
+                        <div class="badge">Code clarity<div><span>Functions, naming, comments</span></div></div>
+                    </div>
+
+                    <h3>Level-up ideas</h3>
+                    <div class="notes">
+                        <ul>
+                            <li>Mark items as “urgent” and filter to show only urgent ones.</li>
+                            <li>Allow sorting the view by quantity instead of alphabetically.</li>
+                            <li>Experiment with grouping items (e.g., "produce", "pantry") using nested dictionaries.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="card" id="project-c">
+                    <h2>Project C · Interactive Randomizer Tools <span style="color: var(--accent); font-size: 0.8em;">(Litong's Assignment)</span></h2>
+                    <p class="project-meta">For students who missed <strong>Week 4</strong> (random module & interactive menus). Build a multi-tool randomizer with dice rolling, coin flipping, and name picking using Python's random module.</p>
+
+                    <div class="pill-list">
+                        <span class="pill">Random Module</span>
+                        <span class="pill">Menu-Driven Program</span>
+                        <span class="pill">User Interaction</span>
+                        <span class="pill">List Management</span>
+                    </div>
+
+                    <h3>Learning objectives</h3>
+                    <ul>
+                        <li>Master the <code>random</code> module functions: <code>randint()</code> and <code>choice()</code>.</li>
+                        <li>Create a persistent menu loop that handles multiple user operations.</li>
+                        <li>Manage dynamic lists where users can add items during program execution.</li>
+                        <li>Practice input validation and provide friendly error messages.</li>
+                    </ul>
+
+                    <h3>Checklist before coding</h3>
+                    <ol class="steps">
+                        <li>Create a file named <code>randomizer_tools.py</code> and import the <code>random</code> module at the top.</li>
+                        <li>Plan your menu structure with 5 clear options including quit functionality.</li>
+                        <li>Initialize an empty list for names that persists throughout the program session.</li>
+                        <li>Test each randomizer function individually before building the full menu.</li>
+                        <li>Add emojis and clear messages to make the interface engaging and user-friendly.</li>
+                    </ol>
+
+                    <h3>Implementation walkthrough</h3>
+                    <div class="step-guide">
+                        <div class="guide-step">
+                            <h4>Step 1 &mdash; Set up the program structure</h4>
+                            <p>Import the random module and create the initial setup with a welcome message and empty names list.</p>
+                            <pre><code>import random
+
+print("🎲🪙👥 Welcome to the Randomizer Tools!")
+print("You can roll dice, toss a coin, or pick a name.")
+
+# Start with an empty name list, let user add names
+names = []
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> The names list stays active throughout the entire program session, allowing users to build their list over time.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 2 &mdash; Create the main menu loop</h4>
+                            <p>Build a persistent menu that keeps running until the user chooses to quit. Each option branches to different randomizer functions.</p>
+                            <pre><code>while True:
+    print("\n--- MENU ---")
+    print("1. Roll Dice")
+    print("2. Toss Coin")
+    print("3. Pick Random Name")
+    print("4. Add a Name")
+    print("5. Quit")
+
+    choice = input("Choose an option (1-5): ")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> The menu stays consistent and clear, with numbered options that are easy for users to remember.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 3 &mdash; Implement dice rolling with user input</h4>
+                            <p>Let the user specify how many dice to roll, then use a loop with <code>random.randint()</code> to generate each result.</p>
+                            <pre><code>    if choice == "1":
+        # Ask how many dice to roll
+        num = int(input("How many dice do you want to roll? "))
+        for i in range(num):
+            dice = random.randint(1, 6)
+            print(f"Dice {i+1}: 🎲 {dice}")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> <code>random.randint(1, 6)</code> generates numbers from 1 to 6 inclusive, simulating a standard die.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 4 &mdash; Add coin flipping and name selection</h4>
+                            <p>Use <code>random.choice()</code> for both coin flipping and name picking. Handle the empty names list gracefully.</p>
+                            <pre><code>    elif choice == "2":
+        flip = input("Press Enter to flip the coin... ")
+        coin = random.choice(["Heads", "Tails"])
+        print("🪙 Result:", coin)
+
+    elif choice == "3":
+        if names:
+            input("Press Enter to pick a random name... ")
+            chosen = random.choice(names)
+            print("🎉 Selected:", chosen)
+        else:
+            print("⚠️ No names available! Add some first.")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> The <code>if names:</code> check prevents errors when the list is empty, guiding users to add names first.</div>
+                        </div>
+                        <div class="guide-step">
+                            <h4>Step 5 &mdash; Complete with name management and exit</h4>
+                            <p>Allow users to add names dynamically and provide a clean exit with input validation for invalid menu choices.</p>
+                            <pre><code>    elif choice == "4":
+        new_name = input("Enter a name to add: ")
+        names.append(new_name)
+        print(f"✅ {new_name} added to the list!")
+
+    elif choice == "5":
+        print("👋 Goodbye!")
+        break
+
+    else:
+        print("❌ Invalid choice. Please pick 1-5.")
+</code></pre>
+                            <div class="apply-box"><strong>Apply it:</strong> The <code>break</code> statement exits the while loop cleanly, and the else clause handles any invalid input gracefully.</div>
+                        </div>
+                    </div>
+
+                    <h3>Key concepts from Week 4</h3>
+                    <div class="notes">
+                        <p><strong>This project reinforces these Week 4 learning goals:</strong></p>
+                        <ul>
+                            <li><strong>Random Module Mastery:</strong> <code>random.randint()</code> for number ranges and <code>random.choice()</code> for list selection</li>
+                            <li><strong>Interactive Menus:</strong> Persistent loops with clear option handling and user input validation</li>
+                            <li><strong>State Management:</strong> Maintaining data (names list) across multiple program operations</li>
+                            <li><strong>User Experience:</strong> Engaging prompts, emojis, and helpful error messages for better interaction</li>
+                        </ul>
+                    </div>
+
+                    <h3>Rubric (5 points)</h3>
+                    <div class="rubric">
+                        <div class="badge">Random functions<div><span>Correct use of randint() and choice()</span></div></div>
+                        <div class="badge">Menu system<div><span>Persistent loop, clear options, exit handling</span></div></div>
+                        <div class="badge">Name management<div><span>Add names, handle empty list gracefully</span></div></div>
+                        <div class="badge">User interaction<div><span>Engaging prompts, clear feedback</span></div></div>
+                        <div class="badge">Code structure<div><span>Clean organization, good variable names</span></div></div>
+                    </div>
+
+                    <h3>Level-up ideas</h3>
+                    <div class="notes">
+                        <ul>
+                            <li>Add different types of dice (4-sided, 8-sided, 20-sided) with user selection.</li>
+                            <li>Create a "weighted coin" option that isn't perfectly 50/50.</li>
+                            <li>Allow users to remove names from the list or view all current names.</li>
+                            <li>Add a "pick teams" feature that randomly divides names into groups.</li>
+                            <li>Track statistics like how many times each name has been picked.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="card" id="teacher-notes">
+                    <h2>Teacher notes & facilitation tips</h2>
+                    <div class="notes">
+                        <p><strong>Timeline & Submission Requirements:</strong></p>
+                        <ul>
+                            <li><strong>Deadline:</strong> Students must complete their assigned project before our next class meeting.</li>
+                            <li><strong>Submission:</strong> Email the completed Python code to <strong>Logiscool.main@gmail.com</strong> (this email address will be updated soon).</li>
+                            <li><strong>File naming:</strong> Use format "[StudentName]_Week[X]_Project.py" (e.g., "Tyler_Week3_Project.py")</li>
+                        </ul>
+                        
+                        <p><strong>In-Class Facilitation:</strong></p>
+                        <ul>
+                            <li>Budget 40–60 minutes per project. Encourage students to narrate their logic as they code.</li>
+                            <li>Because everything stays in memory, prompt students to run through multiple examples in one session and discuss data loss after exit.</li>
+                                                        <li>If they finish early, let them tackle a "Level-up idea" or add polite error messages/emojis to personalize the UX.</li>
+                            <li>Remind students to test all menu options thoroughly before submitting their code.</li>
+                        </ul>
+                        
+                        <p><strong>Assessment Focus:</strong></p>
+                        <ul>
+                            <li>Verify the code runs without errors and handles invalid input gracefully.</li>
+                            <li>Check that students demonstrate understanding of the week's key concepts (see individual project rubrics).</li>
+                            <li>Encourage clean code structure with meaningful variable names and helpful comments.</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>Goal:</strong> Help absent students rebuild confidence quickly while reinforcing the exact skills from the missed lesson — all using interactive input-driven practice. Both projects can later be extended with file saving once they demonstrate mastery.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showProject(student) {
+            const projectA = document.getElementById('project-a');
+            const projectB = document.getElementById('project-b');
+            const projectC = document.getElementById('project-c');
+            const teacherNotes = document.getElementById('teacher-notes');
+            
+            // Remove active class from all links
+            document.querySelectorAll('.quick-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            if (student === 'tyler') {
+                projectA.style.display = 'block';
+                projectB.style.display = 'none';
+                projectC.style.display = 'none';
+                teacherNotes.style.display = 'block';
+                
+                // Update header to personalize for Tyler
+                document.querySelector('header h1').textContent = 'Tyler\'s Python Catch-Up Project';
+                document.querySelector('header p').textContent = 'Complete the Gratitude & Wins Journal project to practice dictionaries and search functionality. This project uses only user input (no file loading) and should take about an hour.';
+                
+                // Highlight Tyler's button
+                document.querySelector('a[onclick="showProject(\'tyler\')"]').classList.add('active');
+                
+            } else if (student === 'jade') {
+                projectA.style.display = 'none';
+                projectB.style.display = 'block';
+                projectC.style.display = 'none';
+                teacherNotes.style.display = 'block';
+                
+                // Update header to personalize for Jade
+                document.querySelector('header h1').textContent = 'Jade\'s Python Catch-Up Project';
+                document.querySelector('header p').textContent = 'Complete the Smart Shopping Helper project to practice loops and list operations. This project uses only user input (no file loading) and should take about an hour.';
+                
+                // Highlight Jade's button
+                document.querySelector('a[onclick="showProject(\'jade\')"]').classList.add('active');
+                
+            } else if (student === 'litong') {
+                projectA.style.display = 'none';
+                projectB.style.display = 'none';
+                projectC.style.display = 'block';
+                teacherNotes.style.display = 'block';
+                
+                // Update header to personalize for Litong
+                document.querySelector('header h1').textContent = 'Litong\'s Python Catch-Up Project';
+                document.querySelector('header p').textContent = 'Complete the Interactive Randomizer Tools project to practice the random module and menu-driven programming. This project uses only user input and should take about an hour.';
+                
+                // Highlight Litong's button
+                document.querySelector('a[onclick="showProject(\'litong\')"]').classList.add('active');
+                
+            } else {
+                // Show all projects (teacher view)
+                projectA.style.display = 'block';
+                projectB.style.display = 'block';
+                projectC.style.display = 'block';
+                teacherNotes.style.display = 'block';
+                
+                // Reset header to original
+                document.querySelector('header h1').textContent = 'Guided Python Practice for Students Who Missed Class';
+                document.querySelector('header p').textContent = 'Each student tackles one compact console project aligned with the week they missed. All projects rely entirely on user input (no file loading), reinforce core Python skills, and can be finished in about an hour.';
+                
+                // Highlight Show All button
+                document.querySelector('a[onclick="showProject(\'all\')"]').classList.add('active');
+            }
+        }
+        
+        // Show all projects by default
+        showProject('all');
+    </script>
+</body>
+</html>
