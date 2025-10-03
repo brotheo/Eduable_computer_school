@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<!-- HTML5 document declaration - tells browser this is modern HTML -->
+<html lang="en"> <!-- Root HTML element with English language attribute -->
+<head>
+    <!-- META INFORMATION SECTION -->
+    <!-- Character encoding for proper text display -->
+    <meta charset="UTF-8">
+    <!-- Responsive design for mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title shown in browser tab -->
+    <title>Week 5 - Text Adventure Game with GUI | Python Learning Guide</title>
+    
+    <style>
+        /* GLOBAL RESET AND BASE STYLING */
+        /* Remove default margins/padding and set consistent fonts */
+        * {
+            margin: 0; /* Remove default margins */
+            padding: 0; /* Remove default padding */
+            box-sizing: border-box; /* Include padding/border in width calculations */
+        }
+        
+        /* BODY STYLING */
+        /* Main page appearance and typography */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font stack */
+            line-height: 1.6; /* Readable line spacing */
+            color: #333; /* Dark gray text color */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Purple gradient background */
+            min-height: 100vh; /* Full viewport height minimum */
+        }
+        
+        /* MAIN CONTAINER */
+        /* Centers content and provides consistent spacing */
+        .container {
+            max-width: 1200px; /* Maximum width for readability */
+            margin: 0 auto; /* Center horizontally */
+            padding: 20px; /* Internal spacing */
+            background: white; /* White background for content */
+            margin-top: 20px; /* Space from top of page */
+            margin-bottom: 20px; /* Space at bottom */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+        
+        /* PAGE HEADER STYLING */
+        /* Main title area with prominent display */
+        header {
+            text-align: center; /* Center-aligned content */
+            margin-bottom: 40px; /* Space below header */
+            padding: 30px; /* Internal spacing */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Dark gradient */
+            color: white; /* White text on dark background */
+            border-radius: 10px; /* Rounded corners */
+        }
+        
+        /* MAIN HEADING */
+        /* Large, prominent title styling */
+        header h1 {
+            font-size: 2.5em; /* Large font size */
+            margin-bottom: 10px; /* Space below title */
+            font-weight: bold; /* Bold text */
+        }
+        
+        /* SUBTITLE STYLING */
+        /* Secondary heading under main title */
+        .subtitle {
+            font-size: 1.2em; /* Slightly larger than body text */
+            opacity: 0.9; /* Slightly transparent for hierarchy */
+            font-weight: 300; /* Light font weight */
+        }
+        
+        /* LESSON SECTION CONTAINERS */
+        /* Individual content sections with consistent styling */
+        .lesson-section {
+            margin: 30px 0; /* Vertical spacing between sections */
+            padding: 25px; /* Internal spacing */
+            background: #f8f9fa; /* Light gray background */
+            border-radius: 12px; /* Rounded corners */
+            border-left: 8px solid #667eea; /* Colored left border for visual accent */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        }
+        
+        /* SECTION HEADINGS */
+        /* Styled headings for each lesson section */
+        .lesson-section h2 {
+            color: #667eea; /* Purple color matching theme */
+            font-size: 1.8em; /* Large, prominent size */
+            margin-bottom: 20px; /* Space below heading */
+            display: flex; /* Flexbox for icon alignment */
+            align-items: center; /* Vertically center content */
+        }
+        
+        /* SECTION HEADING ICONS */
+        /* Space reservation for icons */
+        .lesson-section h2::before {
+            margin-right: 15px; /* Space after icons */
+            font-size: 1.2em; /* Icon size */
+        }
+        
+        /* SECTION-SPECIFIC ICON CONTENT */
+        /* Emoji icons for different lesson sections */
+        .objectives h2::before { content: ''; } /* Learning objectives section */
+        .story h2::before { content: '📖'; } /* Game story section */
+        .concepts h2::before { content: ''; } /* Core concepts section */
+        .gui-features h2::before { content: '🖥️'; } /* GUI features section */
+        .code-example h2::before { content: '💻'; } /* Code examples section */
+        .exercises h2::before { content: '✍️'; } /* Practice exercises section */
+        .assessment h2::before { content: '🏆'; } /* Assessment section */
+        
+        /* RESPONSIVE GRID LAYOUT */
+        /* Grid system for organizing feature cards */
+        .feature-grid {
+            display: grid; /* CSS Grid layout */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+            gap: 20px; /* Space between grid items */
+            margin: 20px 0; /* Vertical spacing around grid */
+        }
+        
+        /* FEATURE CARD STYLING */
+        /* Individual cards within grid layouts */
+        .feature-card {
+            background: white; /* White background */
+            padding: 20px; /* Internal spacing */
+            border-radius: 10px; /* Rounded corners */
+            border-left: 4px solid #28a745; /* Green accent border */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+            transition: transform 0.3s ease; /* Smooth hover animation */
+        }
+        
+        /* HOVER EFFECT FOR CARDS */
+        /* Interactive feedback when user hovers over cards */
+        .feature-card:hover {
+            transform: translateY(-3px); /* Lift effect on hover */
+        }
+        
+        /* FEATURE CARD HEADINGS */
+        /* Titles for individual feature cards */
+        .feature-card h3 {
+            color: #28a745; /* Green color for emphasis */
+            margin-bottom: 10px; /* Space below heading */
+            font-size: 1.2em; /* Slightly larger than body text */
+        }
+        
+        /* CODE SNIPPET CONTAINERS */
+        /* Styled code blocks with syntax highlighting appearance */
+        .code-snippet {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); /* Dark gradient background */
+            color: #e2e8f0; /* Light text for contrast */
+            padding: 25px; /* Internal spacing */
+            border-radius: 12px; /* Rounded corners */
+            font-family: 'Fira Code', 'Courier New', monospace; /* Monospace font for code */
+            font-size: 14px; /* Readable code font size */
+            line-height: 1.6; /* Proper line spacing for code */
+            margin: 20px 0; /* Vertical spacing around code blocks */
+            overflow-x: auto; /* Horizontal scrolling for long lines */
+            border-left: 4px solid #667eea; /* Purple accent border */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            position: relative; /* For positioning pseudo-elements */
+            white-space: pre; /* Preserve whitespace formatting */
+        }
+        
+        /* CODE BLOCK LABELS */
+        /* Floating label above code snippets */
+        .code-snippet::before {
+            content: 'Code Example'; /* Label text */
+            position: absolute; /* Position relative to code block */
+            top: -12px; /* Position above code block */
+            left: 20px; /* Horizontal positioning */
+            background: #667eea; /* Purple background matching theme */
+            color: white; /* White text for contrast */
+            padding: 5px 15px; /* Internal spacing */
+            border-radius: 15px; /* Rounded pill shape */
+            font-size: 0.85em; /* Smaller than main text */
+            font-weight: bold; /* Bold for emphasis */
+            font-family: 'Segoe UI', sans-serif; /* Clean sans-serif font */
+        }
+        
+        /* SYNTAX HIGHLIGHTING CLASSES */
+        /* CSS classes for colorizing different code elements */
+        .keyword { color: #ff79c6; font-weight: bold; } /* Python keywords (def, if, etc.) */
+        .string { color: #f1fa8c; } /* String literals */
+        .comment { color: #6272a4; font-style: italic; } /* Code comments */
+        .function { color: #50fa7b; } /* Function names */
+        .number { color: #bd93f9; } /* Numeric values */
+        .variable { color: #8be9fd; } /* Variable names */
+        
+        /* GUI FEATURE BOXES */
+        /* Special styling for GUI-related content */
+        .gui-feature {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%); /* Light green gradient */
+            border: 2px solid #28a745; /* Green border */
+            border-radius: 15px; /* Rounded corners */
+            padding: 20px; /* Internal spacing */
+            margin: 15px 0; /* Vertical spacing */
+        }
+        
+        /* EXERCISE LIST CONTAINERS */
+        /* Special styling for hands-on exercise sections */
+        .exercise-list {
+            background: #fff3cd; /* Light yellow background for attention */
+            border: 2px solid #ffc107; /* Yellow border for emphasis */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Internal spacing */
+            margin: 20px 0; /* Vertical spacing */
+        }
+        
+        /* EXERCISE LIST HEADINGS */
+        /* Headings within exercise sections */
+        .exercise-list h3 {
+            color: #856404; /* Dark yellow-brown for contrast */
+            margin-bottom: 15px; /* Space below heading */
+        }
+        
+        /* CONCEPT LIST CONTAINERS */
+        /* Styling for core programming concept sections */
+        .concept-list {
+            background: #f8f9fa; /* Light gray background */
+            border: 2px solid #6c757d; /* Gray border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Internal spacing */
+            margin: 20px 0; /* Vertical spacing */
+        }
+        
+        /* LIST STYLING */
+        /* Remove default bullet points for custom styling */
+        ul {
+            list-style-type: none; /* Remove default bullets */
+            padding-left: 0; /* Remove default indentation */
+        }
+        
+        /* LIST ITEM STYLING */
+        /* Custom styling for list items with checkmarks */
+        li {
+            margin-bottom: 10px; /* Space between list items */
+            padding-left: 25px; /* Space for custom checkmark */
+            position: relative; /* For positioning checkmark */
+        }
+        
+        /* CUSTOM CHECKMARK BULLETS */
+        /* Green checkmarks instead of default bullets */
+        li::before {
+            content: "✓"; /* Checkmark character */
+            position: absolute; /* Position relative to list item */
+            left: 0; /* Align to left edge */
+            color: #28a745; /* Green color for positive association */
+            font-weight: bold; /* Bold for emphasis */
+            font-size: 1.2em; /* Slightly larger than text */
+        }
+        
+        /* COMPARISON TABLE STYLING */
+        /* Tables comparing different approaches */
+        .comparison-table {
+            width: 100%; /* Full width */
+            border-collapse: collapse; /* Remove cell spacing */
+            margin: 20px 0; /* Vertical spacing */
+            background: white; /* White background */
+            border-radius: 10px; /* Rounded corners */
+            overflow: hidden; /* Clip content to rounded corners */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+        }
+        
+        /* TABLE HEADER STYLING */
+        /* Header row appearance */
+        .comparison-table th {
+            background: #667eea; /* Purple background */
+            color: white; /* White text */
+            padding: 15px; /* Cell padding */
+            text-align: left; /* Left-aligned text */
+            font-weight: bold; /* Bold text */
+        }
+        
+        /* TABLE CELL STYLING */
+        /* Data cell appearance */
+        .comparison-table td {
+            padding: 12px 15px; /* Cell padding */
+            border-bottom: 1px solid #eee; /* Bottom border */
+            vertical-align: top; /* Align content to top */
+        }
+        
+        /* ALTERNATING ROW COLORS */
+        /* Zebra striping for better readability */
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa; /* Light gray for even rows */
+        }
+        
+        /* HIGHLIGHT BOX CONTAINERS */
+        /* Special emphasis boxes for important content */
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%); /* Green gradient */
+            border: 2px solid #28a745; /* Green border for emphasis */
+            border-radius: 15px; /* Rounded corners */
+            padding: 25px; /* Generous internal spacing */
+            margin: 25px 0; /* Vertical spacing */
+            position: relative; /* For positioning label */
+        }
+        
+        /* HIGHLIGHT BOX LABELS */
+        /* Floating labels for highlight boxes */
+        .highlight-box::before {
+            content: 'WEEK 5 MILESTONE'; /* Label text */
+            position: absolute; /* Position relative to box */
+            top: -12px; /* Position above box */
+            left: 20px; /* Horizontal positioning */
+            background: #28a745; /* Green background matching box */
+            color: white; /* White text for contrast */
+            padding: 5px 15px; /* Internal spacing */
+            border-radius: 20px; /* Rounded pill shape */
+            font-size: 0.9em; /* Slightly smaller than main text */
+            font-weight: bold; /* Bold for emphasis */
+        }
+        
+        /* NAVIGATION CONTAINER */
+        /* Bottom navigation for moving between lessons */
+        .navigation {
+            display: flex; /* Flexbox layout */
+            justify-content: space-between; /* Space buttons apart */
+            margin-top: 40px; /* Space above navigation */
+            padding: 20px; /* Internal spacing */
+            background: #f8f9ff; /* Light blue background */
+            border-radius: 10px; /* Rounded corners */
+        }
+        
+        /* NAVIGATION BUTTON BASE STYLES */
+        /* Common styling for navigation buttons */
+        .nav-button {
+            padding: 12px 25px; /* Internal button spacing */
+            border-radius: 8px; /* Rounded button corners */
+            text-decoration: none; /* Remove underline from links */
+            font-weight: bold; /* Bold button text */
+            transition: all 0.3s ease; /* Smooth hover animations */
+        }
+        
+        /* PREVIOUS BUTTON STYLING */
+        /* Left navigation button (go back) */
+        .prev-button {
+            background: #6c757d; /* Gray background */
+            color: white; /* White text */
+        }
+        
+        /* NEXT BUTTON STYLING */
+        /* Right navigation button (go forward) */
+        .next-button {
+            background: #667eea; /* Purple background matching theme */
+            color: white; /* White text */
+        }
+        
+        /* NAVIGATION BUTTON HOVER EFFECTS */
+        /* Interactive feedback on hover */
+        .nav-button:hover {
+            transform: translateY(-2px); /* Lift effect on hover */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+        }
+        
+        /* RESPONSIVE DESIGN */
+        /* Mobile-friendly adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px; /* Smaller margins on mobile */
+                padding: 15px; /* Reduced padding */
+            }
+            
+            header h1 {
+                font-size: 2em; /* Smaller title on mobile */
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr; /* Single column on mobile */
+            }
+            
+            .comparison-table {
+                font-size: 0.9em; /* Smaller text in tables */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MAIN PAGE CONTAINER -->
+    <!-- Wraps all content with consistent styling -->
+    <div class="container">
+        
+        <!-- PAGE HEADER SECTION -->
+        <!-- Contains lesson title and subtitle -->
+        <header>
+            <h1>Week 5: Text Adventure Game with GUI Interface</h1>
+            <div class="subtitle">From Console to Visual: Adding Tkinter UI to Your Game</div>
+        </header>
+
+        <!-- LEARNING OBJECTIVES SECTION -->
+        <!-- Overview of what students will accomplish in Week 5 -->
+        <div class="lesson-section objectives">
+            <h2>Learning Objectives</h2>
+            <p>In Week 5, you'll take your existing text-based adventure game and transform it into a modern graphical user interface (GUI) application. This lesson demonstrates how to preserve your original game logic while adding visual elements that make your game more accessible and engaging.</p>
+            
+            <!-- RESPONSIVE GRID OF KEY LEARNING POINTS -->
+            <!-- Four main areas of focus for the week -->
+            <div class="feature-grid">
+                <!-- GUI PROGRAMMING -->
+                <div class="feature-card">
+                    <h3>GUI Programming</h3>
+                    <p>Learn Tkinter basics to create windows, buttons, text areas, and interactive elements for your game interface.</p>
+                </div>
+                
+                <!-- CODE PRESERVATION -->
+                <div class="feature-card">
+                    <h3>Code Preservation</h3>
+                    <p>Understand how to add UI layers without changing your existing game logic, maintaining all original functionality.</p>
+                </div>
+                
+                <!-- THREADING CONCEPTS -->
+                <div class="feature-card">
+                    <h3>Threading & I/O</h3>
+                    <p>Explore how to run your game loop in the background while keeping the UI responsive using Python threading.</p>
+                </div>
+                
+                <!-- USER EXPERIENCE -->
+                <div class="feature-card">
+                    <h3>User Experience</h3>
+                    <p>Create intuitive interfaces with both traditional text commands and modern button-based interactions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME STORY & EVOLUTION SECTION -->
+        <!-- How the game has evolved from Week 2 to Week 5 -->
+        <div class="lesson-section story">
+            <h2>Game Evolution: From Text to GUI</h2>
+            
+            <div class="highlight-box">
+                <h3>Your Week 5 Adventure Game</h3>
+                <p><strong>The Story Continues:</strong> Your dungeon escape adventure now features a modern graphical interface while preserving all the original gameplay mechanics. Players can still type commands OR use intuitive buttons and visual elements to navigate, examine items, and manage their inventory.</p>
+            </div>
+            
+            <div class="concept-list">
+                <h3>🏰 Game World Structure (Unchanged)</h3>
+                <div class="code-snippet">
+<span class="variable">rooms</span> = {
+    <span class="string">"cell"</span>: {
+        <span class="string">"description"</span>: <span class="string">"You are in a dark, cold prison cell. There is a door to the north"</span>,
+        <span class="string">"north"</span>: <span class="string">"hallway"</span>,
+        <span class="string">"items"</span>: [<span class="string">"rusty key"</span>, <span class="string">"mysterious scroll"</span>],
+        <span class="string">"age"</span>: (<span class="number">16</span>)
+    },
+    <span class="string">"hallway"</span>: {
+        <span class="string">"description"</span>: <span class="string">"A dimly lit hallway with flickering torches."</span>,
+        <span class="string">"south"</span>: <span class="string">"cell"</span>,
+        <span class="string">"east"</span>: <span class="string">"armory"</span>,
+        <span class="string">"items"</span>: [<span class="string">"health potion"</span>, <span class="string">"map"</span>]
+    },
+    <span class="string">"armory"</span>: {
+        <span class="string">"description"</span>: <span class="string">"An ancient armory filled with weapons"</span>,
+        <span class="string">"west"</span>: <span class="string">"hallway"</span>,
+        <span class="string">"items"</span>: [<span class="string">"iron_sword"</span>, <span class="string">"leather_armor"</span>]
+    }
+}
+
+<span class="comment"># Player state - exactly as you wrote it</span>
+<span class="variable">player</span> = {
+    <span class="string">"location"</span>: <span class="string">"cell"</span>,
+    <span class="string">"inventory"</span>: [],
+    <span class="string">"health"</span>: <span class="number">100</span>
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- CORE PROGRAMMING CONCEPTS SECTION -->
+        <!-- Technical concepts and GUI programming principles -->
+        <div class="lesson-section concepts">
+            <h2>Core Programming Concepts</h2>
+            
+            <div class="concept-list">
+                <h3>🖥️ GUI Programming with Tkinter</h3>
+                <ul>
+                    <li><strong>Window Management:</strong> Creating application windows with titles, sizes, and themes</li>
+                    <li><strong>Widget Layout:</strong> Organizing buttons, text areas, and input fields</li>
+                    <li><strong>Event Handling:</strong> Responding to button clicks and keyboard input</li>
+                    <li><strong>State Updates:</strong> Keeping visual elements synchronized with game data</li>
+                </ul>
+            </div>
+
+            <div class="concept-list">
+                <h3>🔄 Threading & Concurrency</h3>
+                <ul>
+                    <li><strong>Background Threads:</strong> Running game logic separately from UI updates</li>
+                    <li><strong>Queue Communication:</strong> Passing data safely between threads</li>
+                    <li><strong>IO Redirection:</strong> Capturing print statements for GUI display</li>
+                    <li><strong>Responsive Interfaces:</strong> Preventing UI freezing during game operations</li>
+                </ul>
+            </div>
+
+            <div class="concept-list">
+                <h3>🎨 User Interface Design</h3>
+                <ul>
+                    <li><strong>Visual Hierarchy:</strong> Using colors, fonts, and spacing for clarity</li>
+                    <li><strong>Dual Input Methods:</strong> Supporting both text commands and button clicks</li>
+                    <li><strong>Feedback Systems:</strong> Providing immediate visual responses to user actions</li>
+                    <li><strong>Accessibility:</strong> Making games usable for different user preferences</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- GUI FEATURES SECTION -->
+        <!-- Detailed explanation of the interface components -->
+        <div class="lesson-section gui-features">
+            <h2>GUI Features & Components</h2>
+            
+            <div class="feature-grid">
+                <!-- MAIN DISPLAY -->
+                <div class="feature-card">
+                    <h3>📺 Game Display Area</h3>
+                    <p><strong>ScrolledText Widget:</strong> Large, scrollable text area that captures all your print() statements and displays them with syntax highlighting and dark theme styling.</p>
+                </div>
+                
+                <!-- INPUT SYSTEM -->
+                <div class="feature-card">
+                    <h3>⌨️ Command Input System</h3>
+                    <p><strong>Entry Widget:</strong> Text box with your exact prompt "Enter a task do you want to execute:" - accepts all your original commands with Enter key or Execute button.</p>
+                </div>
+                
+                <!-- QUICK COMMANDS -->
+                <div class="feature-card">
+                    <h3> Quick Action Buttons</h3>
+                    <p><strong>Button Grid:</strong> Instant access to common commands - Look 📍, Inventory 🎒, Help ❓, and Quit 🚪 - perfect for new players.</p>
+                </div>
+                
+                <!-- GAME CONTROLS -->
+                <div class="feature-card">
+                    <h3>🎮 Game Control Panel</h3>
+                    <p><strong>Start/Stop System:</strong> Launch new games, pause current sessions, and clear the display. Automatically resets all game state for fresh starts.</p>
+                </div>
+            </div>
+
+            <div class="gui-feature">
+                <h3>🎨 Visual Design Elements</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Component</th>
+                        <th>Colors Used</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Background</strong></td>
+                        <td>#1a1a2e (Dark Navy)</td>
+                        <td>Professional, game-like atmosphere</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Text Display</strong></td>
+                        <td>#16213e (Dark Blue)</td>
+                        <td>Easy reading, reduced eye strain</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Action Buttons</strong></td>
+                        <td>#e94560 (Vibrant Red)</td>
+                        <td>Clear call-to-action, engaging</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quick Commands</strong></td>
+                        <td>#0f3460 (Deep Blue)</td>
+                        <td>Accessible shortcuts, organized</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- CODE ARCHITECTURE SECTION -->
+        <!-- How the UI wrapper preserves original code -->
+        <div class="lesson-section code-example">
+            <h2>Code Architecture: UI Wrapper Approach</h2>
+            
+            <div class="concept-list">
+                <h3> Preserving Your Original Game Logic</h3>
+                <p>The key innovation in Week 5 is the <strong>UI Wrapper</strong> approach - your original game code remains 100% unchanged while a GUI layer handles the visual presentation:</p>
+                
+                <div class="code-snippet">
+<span class="comment"># YOUR ORIGINAL FUNCTIONS - COMPLETELY UNCHANGED</span>
+<span class="keyword">def</span> <span class="function">show_room</span>():
+    <span class="string">"""Display the current room's info."""</span>
+    <span class="variable">current_room</span> = <span class="variable">rooms</span>[<span class="variable">player</span>[<span class="string">"location"</span>]]
+    <span class="function">print</span>(<span class="string">f"\n{current_room['description']}"</span>)
+    <span class="comment"># ... rest of your original code ...</span>
+
+<span class="keyword">def</span> <span class="function">player_movement</span>(<span class="variable">direction</span>):
+    <span class="string">"""Move the player in the specified direction"""</span>
+    <span class="variable">current_room</span> = <span class="variable">rooms</span>[<span class="variable">player</span>[<span class="string">"location"</span>]]
+    <span class="comment"># ... your original movement logic unchanged ...</span>
+
+<span class="comment"># YOUR ORIGINAL GAME LOOP - IDENTICAL LOGIC</span>
+<span class="keyword">while</span> <span class="variable">self</span>.<span class="variable">game_running</span>:
+    <span class="keyword">if</span> <span class="variable">action</span> <span class="keyword">in</span> [<span class="string">"north"</span>, <span class="string">"south"</span>, <span class="string">"west"</span>, <span class="string">"east"</span>]:
+        <span class="variable">dir_map</span> = {<span class="string">'n'</span>:<span class="string">'north'</span>, <span class="string">'s'</span>:<span class="string">'south'</span>, <span class="string">'e'</span>:<span class="string">'east'</span>, <span class="string">'w'</span>:<span class="string">'west'</span>}
+        <span class="comment"># ... exact same logic you wrote ...</span>
+                </div>
+            </div>
+
+            <div class="concept-list">
+                <h3>🔄 How UI Integration Works</h3>
+                <div class="code-snippet">
+<span class="comment"># UI WRAPPER CLASS - HANDLES VISUAL PRESENTATION</span>
+<span class="keyword">class</span> <span class="function">Week5GameUI</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="variable">self</span>, <span class="variable">root</span>):
+        <span class="comment"># Create GUI elements</span>
+        <span class="variable">self</span>.<span class="variable">output_text</span> = <span class="variable">ScrolledText</span>(...)  <span class="comment"># Display area</span>
+        <span class="variable">self</span>.<span class="variable">command_entry</span> = <span class="variable">Entry</span>(...)      <span class="comment"># Input box</span>
+        <span class="variable">self</span>.<span class="variable">command_queue</span> = <span class="variable">queue</span>.<span class="variable">Queue</span>()    <span class="comment"># Thread communication</span>
+    
+    <span class="keyword">def</span> <span class="function">run_game_loop</span>(<span class="variable">self</span>):
+        <span class="comment"># Redirect print() to GUI display</span>
+        <span class="variable">sys</span>.<span class="variable">stdout</span> = <span class="variable">StringIO</span>()
+        
+        <span class="comment"># Run YOUR original game loop unchanged</span>
+        <span class="keyword">while</span> <span class="variable">self</span>.<span class="variable">game_running</span>:
+            <span class="variable">action</span> = <span class="variable">self</span>.<span class="variable">command_queue</span>.<span class="function">get</span>()  <span class="comment"># Get from UI</span>
+            <span class="comment"># ... YOUR exact command processing ...</span>
+                </div>
+            </div>
+
+            <div class="gui-feature">
+                <h3> Benefits of the Wrapper Approach</h3>
+                <ul>
+                    <li><strong>Zero Code Changes:</strong> Your original game logic remains untouched</li>
+                    <li><strong>Learning Continuity:</strong> Students still see the same programming concepts</li>
+                    <li><strong>Easy Debugging:</strong> Original console version still works independently</li>
+                    <li><strong>Gradual Enhancement:</strong> Add GUI features without breaking existing functionality</li>
+                    <li><strong>Dual Interface:</strong> Support both text commands and button clicks</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- HANDS-ON EXERCISES SECTION -->
+        <!-- Practice activities for students -->
+        <div class="lesson-section exercises">
+            <h2>Hands-On Exercises</h2>
+            
+            <div class="exercise-list">
+                <h3> Exercise 1: Run and Explore</h3>
+                <ul>
+                    <li>Run your <code>week5_with_ui.py</code> file</li>
+                    <li>Click " Start Week 5 Adventure" to begin</li>
+                    <li>Try both text commands AND quick buttons</li>
+                    <li>Compare the experience with your original console version</li>
+                    <li>Notice how all your original commands still work perfectly</li>
+                </ul>
+            </div>
+            
+            <div class="exercise-list">
+                <h3>🔧 Exercise 2: Customize the Interface</h3>
+                <ul>
+                    <li>Change the window title in the <code>__init__</code> method</li>
+                    <li>Modify the color scheme by updating the <code>bg</code> values</li>
+                    <li>Add a new quick command button for a custom action</li>
+                    <li>Adjust the window size to your preference</li>
+                    <li>Test that your changes don't affect game functionality</li>
+                </ul>
+            </div>
+            
+            <div class="exercise-list">
+                <h3> Exercise 3: Understand the Threading</h3>
+                <ul>
+                    <li>Add print statements in the <code>run_game_loop</code> method</li>
+                    <li>Observe how output appears in the GUI display</li>
+                    <li>Try clicking buttons while the game is processing commands</li>
+                    <li>Notice how the interface remains responsive</li>
+                    <li>Experiment with the queue communication system</li>
+                </ul>
+            </div>
+
+            <div class="exercise-list">
+                <h3>🚀 Exercise 4: Add New Features</h3>
+                <ul>
+                    <li>Create a "Statistics" button that shows game progress</li>
+                    <li>Add keyboard shortcuts for common commands</li>
+                    <li>Implement a "Save Game" feature using file operations</li>
+                    <li>Create an "About" dialog with game information</li>
+                    <li>Add sound effects or background music to enhance atmosphere</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ASSESSMENT SECTION -->
+        <!-- Check understanding and progress -->
+        <div class="lesson-section assessment">
+            <h2>Week 5 Assessment & Reflection</h2>
+            
+            <div class="concept-list">
+                <h3>📋 Self-Check Questions</h3>
+                <ul>
+                    <li><strong>Code Preservation:</strong> Can you explain why your original game functions didn't need to change?</li>
+                    <li><strong>GUI Components:</strong> What are the main Tkinter widgets used in your interface?</li>
+                    <li><strong>Threading Benefits:</strong> Why is the game loop run in a separate thread?</li>
+                    <li><strong>User Experience:</strong> How does the GUI make your game more accessible?</li>
+                    <li><strong>Future Enhancements:</strong> What additional features would improve your game?</li>
+                </ul>
+            </div>
+            
+            <div class="gui-feature">
+                <h3>🎓 Programming Skills Demonstrated</h3>
+                <ul>
+                    <li><strong>GUI Development:</strong> Building interactive desktop applications</li>
+                    <li><strong>Code Architecture:</strong> Separating presentation from business logic</li>
+                    <li><strong>Concurrency:</strong> Managing multiple execution threads</li>
+                    <li><strong>I/O Redirection:</strong> Capturing and displaying program output</li>
+                    <li><strong>Event-Driven Programming:</strong> Responding to user interactions</li>
+                    <li><strong>State Management:</strong> Coordinating UI elements with game data</li>
+                </ul>
+            </div>
+            
+            <div class="highlight-box">
+                <h3>🏆 Congratulations!</h3>
+                <p>You've successfully transformed a console-based text adventure into a modern GUI application while preserving all original game logic. This demonstrates advanced programming concepts including interface design, threading, and architectural patterns that separate concerns between presentation and business logic.</p>
+                
+                <p><strong>Next Steps:</strong> Consider exploring advanced GUI features like menus, dialogs, graphics, animations, or even web-based interfaces using frameworks like Flask or Django!</p>
+            </div>
+        </div>
+
+        <!-- NAVIGATION SECTION -->
+        <!-- Links to other lessons -->
+        <div class="navigation">
+            <a href="week4_lesson_guide.html" class="nav-button prev-button">← Week 4: Complete Game</a>
+            <a href="week6_lesson_guide.html" class="nav-button next-button">Week 6: Advanced Features →</a>
+        </div>
+    </div>
+</body>
+</html>
